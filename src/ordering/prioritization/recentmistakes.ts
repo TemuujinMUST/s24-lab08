@@ -1,7 +1,7 @@
-import { CardStatus } from '../../cards/cardstatus.js'
-import { CardOrganizer } from '../cardorganizer.js'
+import { CardStatus } from "../../cards/cardstatus.js";
+import { CardOrganizer } from "../cardorganizer.js";
 
-function newRecentMistakesFirstSorter (): CardOrganizer {
+function newRecentMistakesFirstSorter(): CardOrganizer {
   /**
    * Computes the most recent mistake's time stamp for a card and helps in
    * determining the sequence of cards in the next iteration, based on the
@@ -10,6 +10,12 @@ function newRecentMistakesFirstSorter (): CardOrganizer {
    * @param cardStatus The {@link CardStatus} object with failing
    * @return The most recent incorrect response time stamp
    */
+
+  function mostRecentMistakeIndex(cardStatus: CardStatus): number {
+    const results = cardStatus.getResults();
+    return results.lastIndexOf(false);
+  }
+
   return {
     /**
      * Orders the cards by the time of most recent incorrect answers provided for them.
@@ -18,9 +24,16 @@ function newRecentMistakesFirstSorter (): CardOrganizer {
      * @return The ordered cards.
      */
     reorganize: function (cards: CardStatus[]): CardStatus[] {
-      return []
-    }
-  }
-};
+      const c = cards.slice();
+      c.sort((a, b) => {
+        const aIndex = mostRecentMistakeIndex(a);
+        const bIndex = mostRecentMistakeIndex(b);
 
-export { newRecentMistakesFirstSorter }
+        return bIndex - aIndex;
+      });
+      return c;
+    },
+  };
+}
+
+export { newRecentMistakesFirstSorter };

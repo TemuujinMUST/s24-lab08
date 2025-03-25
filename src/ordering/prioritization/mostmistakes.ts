@@ -1,10 +1,10 @@
-import { CardStatus } from '../../cards/cardstatus.js'
-import { CardOrganizer } from '../cardorganizer.js'
+import { CardStatus } from "../../cards/cardstatus.js";
+import { CardOrganizer } from "../cardorganizer.js";
 
-function newMostMistakesFirstSorter (): CardOrganizer {
-  function numberOfFailures (cardStatus: CardStatus): number {
-    return cardStatus.getResults().filter((e) => !e).length
-  };
+function newMostMistakesFirstSorter(): CardOrganizer {
+  function numberOfFailures(cardStatus: CardStatus): number {
+    return cardStatus.getResults().filter((e) => !e).length;
+  }
 
   return {
     /**
@@ -14,13 +14,17 @@ function newMostMistakesFirstSorter (): CardOrganizer {
      * @return The ordered cards.
      */
     reorganize: function (cards: CardStatus[]): CardStatus[] {
-      const c = cards.slice()
+      const c = cards.slice();
       c.sort((a, b) =>
-        numberOfFailures(a) > numberOfFailures(b) ? -1 : (numberOfFailures(a) < numberOfFailures(b) ? 1 : 0)
-      )
-      return c
-    }
-  }
-};
+        numberOfFailures(a) > numberOfFailures(b)
+          ? -1
+          : numberOfFailures(a) < numberOfFailures(b)
+          ? 1
+          : 0
+      );
+      return c;
+    },
+  };
+}
 
-export { newMostMistakesFirstSorter }
+export { newMostMistakesFirstSorter };
